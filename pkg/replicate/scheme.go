@@ -59,7 +59,6 @@ func NewBlockFilter(
 
 // Filter return true if block is non-compacted and matches selector.
 func (bf *BlockFilter) Filter(b *metadata.Meta) bool {
-	// TODO(bwplotka): Allow injecting custom labels as shipper does.
 	if len(b.Thanos.Labels) == 0 {
 		level.Error(bf.logger).Log("msg", "filtering block", "reason", "labels should not be empty")
 		return false
@@ -226,6 +225,7 @@ func (rs *replicationScheme) ensureBlockIsReplicated(ctx context.Context, id uli
 		return errors.Wrap(err, "get meta file from target bucket")
 	}
 
+	// TODO(bwplotka): Allow injecting custom labels as shipper does.
 	originMetaFileContent, err := ioutil.ReadAll(originMetaFile)
 	if err != nil {
 		return errors.Wrap(err, "read origin meta file")
