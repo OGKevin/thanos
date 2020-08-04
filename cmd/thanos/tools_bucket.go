@@ -7,13 +7,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/thanos-io/thanos/pkg/model"
 	"os"
 	"sort"
 	"strconv"
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/thanos-io/thanos/pkg/model"
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
@@ -443,7 +444,6 @@ func registerBucketReplicate(m map[string]setupFunc, root *kingpin.CmdClause, na
 		Default("0000-01-01T00:00:00Z"))
 	maxTime := model.TimeOrDuration(cmd.Flag("max-time", "End of time range limit to replicate. Thanos Replicate will replicate only metrics, which happened earlier than this value. Option can be a constant time in RFC3339 format or time duration relative to current time, such as -1d or 2h45m. Valid duration units are ms, s, m, h, d, w, y.").
 		Default("9999-12-31T23:59:59Z"))
-
 
 	m[name+" replicate"] = func(g *run.Group, logger log.Logger, reg *prometheus.Registry, tracer opentracing.Tracer, _ <-chan struct{}, _ bool) error {
 		matchers, err := replicate.ParseFlagMatchers(*matcherStrs)
