@@ -444,6 +444,7 @@ func registerBucketReplicate(m map[string]setupFunc, root *kingpin.CmdClause, na
 		Default("0000-01-01T00:00:00Z"))
 	maxTime := model.TimeOrDuration(cmd.Flag("max-time", "End of time range limit to replicate. Thanos Replicate will replicate only metrics, which happened earlier than this value. Option can be a constant time in RFC3339 format or time duration relative to current time, such as -1d or 2h45m. Valid duration units are ms, s, m, h, d, w, y.").
 		Default("9999-12-31T23:59:59Z"))
+	deleteOldBlocks := cmd.Flag("delete-old-blocks", "Delete blocks that are older then max-time.").Default("false").Bool()
 
 	m[name+" replicate"] = func(g *run.Group, logger log.Logger, reg *prometheus.Registry, tracer opentracing.Tracer, _ <-chan struct{}, _ bool) error {
 		matchers, err := replicate.ParseFlagMatchers(*matcherStrs)
@@ -471,6 +472,7 @@ func registerBucketReplicate(m map[string]setupFunc, root *kingpin.CmdClause, na
 			*singleRun,
 			minTime,
 			maxTime,
+			*deleteOldBlocks,
 		)
 	}
 
