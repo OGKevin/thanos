@@ -17,7 +17,6 @@ import (
 
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
-	"github.com/oklog/ulid"
 	"github.com/pkg/errors"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -209,6 +208,7 @@ func (rs *replicationScheme) execute(ctx context.Context) error {
 func (rs *replicationScheme) ensureBlockIsReplicated(ctx context.Context, meta *metadata.Meta) error {
 	blockID := meta.ULID.String()
 	chunksDir := path.Join(blockID, thanosblock.ChunksDirname)
+
 	indexFile := path.Join(blockID, thanosblock.IndexFilename)
 	metaFile := path.Join(blockID, thanosblock.MetaFilename)
 
