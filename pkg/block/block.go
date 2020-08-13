@@ -159,7 +159,9 @@ func markForDeletion(ctx context.Context, logger log.Logger, bkt objstore.Bucket
 	if err := bkt.Upload(ctx, deletionMarkFile, bytes.NewBuffer(deletionMark)); err != nil {
 		return errors.Wrapf(err, "upload file %s to bucket", deletionMarkFile)
 	}
-	markedForDeletion.Inc()
+	if markedForDeletion != nil {
+		markedForDeletion.Inc()
+	}
 	level.Info(logger).Log("msg", "block has been marked for deletion", "block", id)
 	return nil
 }
